@@ -5,16 +5,16 @@ const todoList = document.getElementById("todo-list")
 // Fetch data and pass them forward to the create function
 fetch("/todoes")
   .then(response => response.json())
-  .then(data => createTodos(data))
+  .then(data => createTodos(data.body))
 
 
 /**
  * The shape of the JSON object containing the todo data
  * 
  * @typedef {{
- * Id: number
- * Name?: string
- * IsComplete: boolean
+ * id: number
+ * name?: string
+ * isComplete: boolean
 * }} Todo
 */
 
@@ -26,6 +26,7 @@ fetch("/todoes")
  * A list of todo data 
  */
 function createTodos(todosData) {
+  console.log(todosData)
 
   if(!Array.isArray(todosData)) {
     throw new Error("Todo data is not an array")
@@ -34,20 +35,21 @@ function createTodos(todosData) {
   const todoes = todosData.map(todo => {
     // Setup the Todo "Card"
     const todoCard = document.createElement("div")
+    todoCard.className = "todo-item"
 
     // Create the title and append to container
     const title = document.createElement("h2")
-    title.textContent = todo.Name
+    title.textContent = todo.name
     todoCard.appendChild(title)
 
     const complete = document.createElement("h2")
-    complete.textContent = todo.IsComplete ? "true": "false"
+    complete.textContent = todo.isComplete ? "true": "false"
     todoCard.appendChild(complete)
 
     return todoCard
   })
   
-  batchAttach(todoes, attachPoint)
+  batchAttach(todoes, todoList)
 }
 
 /**
@@ -60,9 +62,14 @@ function createTodos(todosData) {
  * element to attach to
  */
 function batchAttach(elements, attachPoint) {
+  // This creates an in memory HTML element
+  // which we append children to
   const fragment = document.createDocumentFragment()
-
   elements.forEach(element => fragment.appendChild(element))
 
+  // This allows us to only update the content of the
+  // web page once, causing only a single redraw
+  // compared to updating the webbrowser
+  // "number of elements to append" times
   attachPoint.appendChild(fragment)
 }

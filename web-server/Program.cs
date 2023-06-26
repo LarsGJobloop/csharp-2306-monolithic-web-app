@@ -1,6 +1,8 @@
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
+var todoes = new System.Web.HttpUtility();
+
 // Serving static files (HTML, CSS, JS, JPG, etc)
 
 app.UseStaticFiles();
@@ -15,7 +17,17 @@ app.MapGet("/index.html", () => Results.Redirect("/"));
 
 // Small API for our application
 app.MapGet("/todoes", () => {
-  return Results.Json(new {todoes = "All the todoes"});
+
+  var todoes = new {
+    body = new[]
+    {
+      new { Id = 0, Name = "Walk dog", IsComplete = false},
+      new { Id = 1, Name = "Feed Shark", IsComplete = false},
+      new { Id = 2, Name = "Remember towel", IsComplete = false},
+    }
+  };
+
+  return Results.Ok(todoes);
 });
 
 

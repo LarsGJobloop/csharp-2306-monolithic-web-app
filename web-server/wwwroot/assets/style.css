@@ -30,3 +30,16 @@ li {
   flex-direction: column;
   align-items: center;
 }
+
+#todo-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.todo-item {
+  background-color: aqua;
+
+  padding: .5rem 1rem;
+  border-radius: 10px;
+}
