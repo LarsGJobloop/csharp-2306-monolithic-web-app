@@ -1,4 +1,7 @@
 var builder = WebApplication.CreateBuilder(args);
+
+// Setup the JSON De-/Serializer
+
 var app = builder.Build();
 
 // Serving static files (HTML, CSS, JS, JPG, etc)
@@ -27,8 +30,16 @@ app.MapGet("/todoes", () => {
   return Results.Ok(todoes);
 });
 
-app.MapPut("/todoitems/{id}", (int id) => {
+app.MapPut("/todoitems/{id}", async (int id, HttpContent content) => {
   Console.WriteLine($"Toggling status of todo: {id}");
+
+  Todo? jsonPayload = await content.ReadFromJsonAsync<Todo>();
+
+  if (jsonPayload == null) {
+    Console.WriteLine("Help");
+  }
+
+  Console.WriteLine(jsonPayload);
 
   return Results.Ok();
 });
@@ -36,3 +47,10 @@ app.MapPut("/todoitems/{id}", (int id) => {
 
 // Starting up and exposing the server to our local network
 app.Run();
+
+public class Todo
+{
+    public int Id { get; set; }
+    public string? Name { get; set; }
+    public bool IsComplete { get; set; }
+}

@@ -19,8 +19,12 @@ fetch("/todoes")
 async function toggleComplete(id, currentStatus) {
   const response = await fetch("/todoitems/" + id, {
     method: "PUT",
+    headers: new Headers({'content-type': 'application/json'}),
+    // Set new information here
     body: {
-      newStatus: !currentStatus
+      Id: id,
+      Name: "Hello World",
+      IsComplete: false,
     }
   });
 
@@ -89,6 +93,7 @@ function batchAttach(elements, attachPoint) {
  * Creates a new todo card from the data
  * 
  * @param {Todo} todo
+ * Todo details
  * 
  * @returns The new Todo Card
  */
