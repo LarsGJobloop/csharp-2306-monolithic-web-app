@@ -1,10 +1,7 @@
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-var todoes = new System.Web.HttpUtility();
-
 // Serving static files (HTML, CSS, JS, JPG, etc)
-
 app.UseStaticFiles();
 
 // Returning the index html, so the user does not have to specify: www.ourpage.com/index.html
@@ -15,7 +12,7 @@ app.MapGet("/", () => {
 app.MapGet("/index.html", () => Results.Redirect("/"));
 
 
-// Small API for our application
+// The Web API of our application
 app.MapGet("/todoes", () => {
 
   var todoes = new {
@@ -28,6 +25,12 @@ app.MapGet("/todoes", () => {
   };
 
   return Results.Ok(todoes);
+});
+
+app.MapPut("/todoitems/{id}", (int id) => {
+  Console.WriteLine($"Toggling status of todo: {id}");
+
+  return Results.Ok();
 });
 
 
