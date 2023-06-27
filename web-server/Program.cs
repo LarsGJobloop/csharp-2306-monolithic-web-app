@@ -1,3 +1,7 @@
+using System.Text;
+using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Setup the JSON De-/Serializer
@@ -30,18 +34,10 @@ app.MapGet("/todoes", () => {
   return Results.Ok(todoes);
 });
 
-app.MapPut("/todoitems/{id}", async (int id, HttpContent content) => {
-  Console.WriteLine($"Toggling status of todo: {id}");
+app.MapPut("/todoitems/{id}", async (int id, [FromBody] Todo todo ) => {
+  Console.WriteLine(todo.Name);
 
-  Todo? jsonPayload = await content.ReadFromJsonAsync<Todo>();
-
-  if (jsonPayload == null) {
-    Console.WriteLine("Help");
-  }
-
-  Console.WriteLine(jsonPayload);
-
-  return Results.Ok();
+  return Results.Accepted();
 });
 
 

@@ -21,11 +21,11 @@ async function toggleComplete(id, currentStatus) {
     method: "PUT",
     headers: new Headers({'content-type': 'application/json'}),
     // Set new information here
-    body: {
+    body: JSON.stringify({
       Id: id,
       Name: "Hello World",
       IsComplete: false,
-    }
+    })
   });
 
   if(response.ok) {
