@@ -1,11 +1,6 @@
-using System.Text;
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Setup the JSON De-/Serializer
-
 var app = builder.Build();
 
 // Serving static files (HTML, CSS, JS, JPG, etc)
@@ -20,6 +15,7 @@ app.MapGet("/index.html", () => Results.Redirect("/"));
 
 
 // The Web API of our application
+// Return a JSON object
 app.MapGet("/todoes", () => {
 
   var todoes = new {
@@ -34,7 +30,8 @@ app.MapGet("/todoes", () => {
   return Results.Ok(todoes);
 });
 
-app.MapPut("/todoitems/{id}", async (int id, [FromBody] Todo todo ) => {
+// Parsing JSON Object recived from the frontend
+app.MapPut("/todoitems/{id}", (int id, [FromBody] Todo todo ) => {
   Console.WriteLine(todo.Name);
 
   return Results.Accepted();
@@ -44,6 +41,7 @@ app.MapPut("/todoitems/{id}", async (int id, [FromBody] Todo todo ) => {
 // Starting up and exposing the server to our local network
 app.Run();
 
+// The Todo Model (what data it contains)
 public class Todo
 {
     public int Id { get; set; }
